@@ -1,6 +1,7 @@
 package com.chrismeiercs.gonative;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -10,12 +11,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private ImageView imageThumbnail;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ImageButton cameraButton = (ImageButton) findViewById(R.id.cameraButton);
+        imageThumbnail = (ImageView) findViewById(R.id.photoThumbnail);
 
         cameraButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -65,6 +69,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageThumbnail.setImageBitmap(imageBitmap);
+        }
+    }
 
 
 }
